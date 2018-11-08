@@ -4,10 +4,15 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <time.h>
+#include <fcntl.h>
 
 static void sighandler(int signo){
   if(signo == SIGINT){
-    printf("Program ended due to SIGINT\n");
+    int fd = open("foo.txt", O_CREAT | O_TRUNC | O_WRONLY, 0644);
+    char message[256] = "Program ended due to SIGINT \n";
+    write(fd, message, 256);
+    close(fd);
     exit(0);
   }
   if(signo == SIGUSR1){
